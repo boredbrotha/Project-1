@@ -2,6 +2,12 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Project 1\UI">
+      <UniqueIdentifier>{2E39EC58-9009-3257-5CFE-FE7196AD048D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project 1\Data">
+      <UniqueIdentifier>{2EACCC38-CED1-09A7-7DC6-610D1209893C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Project 1\Source">
       <UniqueIdentifier>{E1650DE8-3832-DEE6-2DB4-4B0A5D65EC8F}</UniqueIdentifier>
     </Filter>
@@ -694,6 +700,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\AdsrComponent.cpp">
+      <Filter>Project 1\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MGainComponent.cpp">
+      <Filter>Project 1\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\OscComponent.cpp">
+      <Filter>Project 1\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\AdsrData.cpp">
+      <Filter>Project 1\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\OscData.cpp">
+      <Filter>Project 1\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\SynthSound.cpp">
+      <Filter>Project 1\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\SynthVoice.cpp">
+      <Filter>Project 1\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>Project 1\Source</Filter>
     </ClCompile>
@@ -3660,6 +3687,27 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\AdsrComponent.h">
+      <Filter>Project 1\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MGainComponent.h">
+      <Filter>Project 1\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\OscComponent.h">
+      <Filter>Project 1\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\AdsrData.h">
+      <Filter>Project 1\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\OscData.h">
+      <Filter>Project 1\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\SynthSound.h">
+      <Filter>Project 1\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\SynthVoice.h">
+      <Filter>Project 1\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
       <Filter>Project 1\Source</Filter>
     </ClInclude>

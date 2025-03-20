@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="P1puNS" name="Project 1" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturer="AsahdPlugins" aaxIdentifier="hofsportsllc.com">
   <MAINGROUP id="RHBpJq" name="Project 1">
+    <GROUP id="{6ABB9040-2F5C-3094-3DDC-2F2E6548D56B}" name="UI">
+      <FILE id="xq6k6I" name="AdsrComponent.cpp" compile="1" resource="0"
+            file="Source/AdsrComponent.cpp"/>
+      <FILE id="VPGfu7" name="AdsrComponent.h" compile="0" resource="0" file="Source/AdsrComponent.h"/>
+      <FILE id="aQKNux" name="MGainComponent.cpp" compile="1" resource="0"
+            file="Source/MGainComponent.cpp"/>
+      <FILE id="dA0yZW" name="MGainComponent.h" compile="0" resource="0"
+            file="Source/MGainComponent.h"/>
+      <FILE id="sbkvxq" name="OscComponent.cpp" compile="1" resource="0"
+            file="Source/OscComponent.cpp"/>
+      <FILE id="LDDpge" name="OscComponent.h" compile="0" resource="0" file="Source/OscComponent.h"/>
+    </GROUP>
+    <GROUP id="{42DE6F42-C408-FED7-66C9-87EC19189A7D}" name="Data">
+      <FILE id="tlGZxA" name="AdsrData.cpp" compile="1" resource="0" file="Source/AdsrData.cpp"/>
+      <FILE id="BiId98" name="AdsrData.h" compile="0" resource="0" file="Source/AdsrData.h"/>
+      <FILE id="wpYj61" name="OscData.cpp" compile="1" resource="0" file="Source/OscData.cpp"/>
+      <FILE id="vEHWHV" name="OscData.h" compile="0" resource="0" file="Source/OscData.h"/>
+    </GROUP>
     <GROUP id="{E15F8961-0F2C-FC0E-FF30-EFC8FF375B08}" name="Source">
+      <FILE id="m7MHoY" name="SynthSound.cpp" compile="1" resource="0" file="Source/SynthSound.cpp"/>
+      <FILE id="dqKtRr" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
+      <FILE id="zdcRMg" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
       <FILE id="dYLK9K" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
+      <FILE id="v2TSdL" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
       <FILE id="Bvfbfp" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
       <FILE id="JCWYsp" name="PluginEditor.cpp" compile="1" resource="0"

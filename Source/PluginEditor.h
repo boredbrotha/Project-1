@@ -10,6 +10,9 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "OscComponent.h"
+#include "AdsrComponent.h"
+#include "MGainComponent.h"
 
 //==============================================================================
 /**
@@ -28,6 +31,14 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     Project1AudioProcessor& audioProcessor;
+
+    MGainComponent mGain;
+
+    OscComponent osc;
+
+    AdsrComponent adsr;
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscSelAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Project1AudioProcessorEditor)
 };

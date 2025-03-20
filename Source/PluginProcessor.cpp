@@ -19,9 +19,16 @@ Project1AudioProcessor::Project1AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts(*this, nullptr, "Parameters", createParams())
 #endif
 {
+    const int numVoices = 8;
+
+    for (int i = 0; i < numVoices; ++i) {
+        synth.addVoice(new SynthVoice());
+    }
+
+    synth.addSound(new SynthSound());
 }
 
 Project1AudioProcessor::~Project1AudioProcessor()
@@ -95,6 +102,14 @@ void Project1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
+    synth.setCurrentPlaybackSampleRate(sampleRate);
+
+    for (int i = 0; i < synth.getNumVoices(); i++) {
+        if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
+            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+        }
+    }
 }
 
 void Project1AudioProcessor::releaseResources()
@@ -144,18 +159,31 @@ void Project1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+    for (int i = 0; i < synth.getNumVoices(); ++i) {
+        if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
+            
+
+            auto& attack = *apvts.getRawParameterValue("ATTACK");
+
+            auto& decay = *apvts.getRawParameterValue("DECAY");
+
+            auto& sustain = *apvts.getRawParameterValue("SUSTAIN");
+
+            auto& release = *apvts.getRawParameterValue("RELEASE");
+
+            auto& oscWaveChoice = *apvts.getRawParameterValue("OSC1WAVETYPE");
+
+            voice->update(attack.load(), decay.load(), sustain.load(), release.load());
+
+            voice->getOscillator().setWaveType(oscWaveChoice);
+
+            
+        }
+
     }
+
+    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -188,4 +216,39 @@ void Project1AudioProcessor::setStateInformation (const void* data, int sizeInBy
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new Project1AudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout Project1AudioProcessor::createParams() {
+
+    //Combobox: switch oscillator
+
+    //Attack - float
+
+    //Decay - float
+
+    //Sustain - float
+
+    //Release - float
+
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+
+
+    //OSC select
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC", "Oscillator", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
+
+
+
+    //ADSR
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> {0.0f, 1.0f, }, 0.1f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> {0.0f, 1.0f, }, 0.1f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float> {0.0f, 1.0f, }, 1.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> {0.0f, 3.0f, }, 0.1f));
+
+    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
+
+
+    return { params.begin(), params.end() };
 }
