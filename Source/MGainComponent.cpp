@@ -16,8 +16,10 @@ MGainComponent::MGainComponent()
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-
+    mSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    mSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 50, 25);
     addAndMakeVisible(mSlider);
+
 }
 
 MGainComponent::~MGainComponent()
@@ -26,12 +28,10 @@ MGainComponent::~MGainComponent()
 
 void MGainComponent::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::black);
-
 }
 
 void MGainComponent::resized()
 {
 
-  
+    mSlider.setBounds(0, 0, getWidth(), getHeight());
 }

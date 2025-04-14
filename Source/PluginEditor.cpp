@@ -22,6 +22,7 @@ Project1AudioProcessorEditor::Project1AudioProcessorEditor (Project1AudioProcess
     addAndMakeVisible(mGain);
 
 
+
 }
 
 Project1AudioProcessorEditor::~Project1AudioProcessorEditor()
@@ -41,5 +42,7 @@ void Project1AudioProcessorEditor::resized()
     // subcomponents in your editor..
 
     osc.setBounds(10, 10, 100, 30);
-    adsr.setBounds(getWidth() / 2, 0, getWidth() / 2, getHeight());
+    adsr.setBounds(getWidth() / 3 , 0, getWidth() / 2, getHeight());
+    mGain.setBounds(getLocalBounds().getWidth()-105, 0, 100, 100);
+
 }
