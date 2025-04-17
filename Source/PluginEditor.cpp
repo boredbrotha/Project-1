@@ -11,7 +11,7 @@
 
 //==============================================================================
 Project1AudioProcessorEditor::Project1AudioProcessorEditor (Project1AudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p),  osc(audioProcessor.apvts, "OSC1WAVETYPE"), adsr(audioProcessor.apvts)
+    : AudioProcessorEditor (&p), audioProcessor (p),  osc(audioProcessor.apvts, "OSC1WAVETYPE"), adsr(audioProcessor.apvts), mGain(audioProcessor.apvts)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.

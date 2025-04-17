@@ -14,6 +14,7 @@
 #include "SynthSound.h"
 #include "AdsrData.h"
 #include "OscData.h"
+#include "MGainData.h"
 
 class SynthVoice : public juce::SynthesiserVoice {
 
@@ -32,7 +33,7 @@ public:
 
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
-    void update(const float attack, const float decay, const float sustain, const float release);
+    void update(const float attack, const float decay, const float sustain, const float release, const float mGainLinear);
 
     OscData& getOscillator() { return osc; };
 
@@ -41,7 +42,7 @@ private:
     OscData osc;
     AdsrData adsr;
     juce::AudioBuffer<float> synthBuffer;
-    juce::dsp::Gain<float> gain;
+    MGainData mGain;
     bool isPrepared{ false };
 
 };

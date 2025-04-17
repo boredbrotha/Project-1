@@ -19,6 +19,8 @@
     <GROUP id="{42DE6F42-C408-FED7-66C9-87EC19189A7D}" name="Data">
       <FILE id="tlGZxA" name="AdsrData.cpp" compile="1" resource="0" file="Source/AdsrData.cpp"/>
       <FILE id="BiId98" name="AdsrData.h" compile="0" resource="0" file="Source/AdsrData.h"/>
+      <FILE id="PkteGA" name="MGainData.cpp" compile="1" resource="0" file="Source/MGainData.cpp"/>
+      <FILE id="LGIVT4" name="MGainData.h" compile="0" resource="0" file="Source/MGainData.h"/>
       <FILE id="wpYj61" name="OscData.cpp" compile="1" resource="0" file="Source/OscData.cpp"/>
       <FILE id="vEHWHV" name="OscData.h" compile="0" resource="0" file="Source/OscData.h"/>
     </GROUP>

@@ -712,6 +712,9 @@
     <ClCompile Include="..\..\Source\AdsrData.cpp">
       <Filter>Project 1\Data</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\MGainData.cpp">
+      <Filter>Project 1\Data</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\OscData.cpp">
       <Filter>Project 1\Data</Filter>
     </ClCompile>
@@ -3697,6 +3700,9 @@
       <Filter>Project 1\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\AdsrData.h">
+      <Filter>Project 1\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MGainData.h">
       <Filter>Project 1\Data</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\OscData.h">

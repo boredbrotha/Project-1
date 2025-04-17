@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\Source\MGainComponent.cpp"/>
     <ClCompile Include="..\..\Source\OscComponent.cpp"/>
     <ClCompile Include="..\..\Source\AdsrData.cpp"/>
+    <ClCompile Include="..\..\Source\MGainData.cpp"/>
     <ClCompile Include="..\..\Source\OscData.cpp"/>
     <ClCompile Include="..\..\Source\SynthSound.cpp"/>
     <ClCompile Include="..\..\Source\SynthVoice.cpp"/>
@@ -2941,6 +2942,7 @@
     <ClInclude Include="..\..\Source\MGainComponent.h"/>
     <ClInclude Include="..\..\Source\OscComponent.h"/>
     <ClInclude Include="..\..\Source\AdsrData.h"/>
+    <ClInclude Include="..\..\Source\MGainData.h"/>
     <ClInclude Include="..\..\Source\OscData.h"/>
     <ClInclude Include="..\..\Source\SynthSound.h"/>
     <ClInclude Include="..\..\Source\SynthVoice.h"/>

@@ -174,7 +174,9 @@ void Project1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
             auto& oscWaveChoice = *apvts.getRawParameterValue("OSC1WAVETYPE");
 
-            voice->update(attack.load(), decay.load(), sustain.load(), release.load());
+            auto& mGain = *apvts.getRawParameterValue("MGAIN");
+
+            voice->update(attack.load(), decay.load(), sustain.load(), release.load(), mGain.load());
 
             voice->getOscillator().setWaveType(oscWaveChoice);
 
@@ -235,6 +237,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project1AudioProcessor::crea
 
     //OSC select
     params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC", "Oscillator", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
+    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
+
 
 
 
@@ -245,10 +249,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout Project1AudioProcessor::crea
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float> {0.0f, 1.0f, }, 1.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> {0.0f, 3.0f, }, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> {0.0f, 3.0f, }, 1.0f));
 
-    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
 
+    //Master Gain Knob
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("MGAIN", "Master Gain", juce::NormalisableRange<float> {0.0f, 1.0f, }, 1.0f));
+   
 
     return { params.begin(), params.end() };
 }

@@ -12,13 +12,15 @@
 #include "MGainComponent.h"
 
 //==============================================================================
-MGainComponent::MGainComponent()
+MGainComponent::MGainComponent(juce::AudioProcessorValueTreeState& apvts)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     mSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     mSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 50, 25);
     addAndMakeVisible(mSlider);
+    
+    mSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts,"MGAIN", mSlider);
 
 }
 

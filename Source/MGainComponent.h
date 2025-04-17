@@ -18,7 +18,7 @@
 class MGainComponent  : public juce::Component
 {
 public:
-    MGainComponent();
+    MGainComponent(juce::AudioProcessorValueTreeState& apvts);
     ~MGainComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -27,7 +27,7 @@ public:
 private:
 
     juce::Slider mSlider;
-
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mSliderAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MGainComponent)
 };
