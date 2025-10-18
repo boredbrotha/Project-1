@@ -1,4 +1,4 @@
-# Dual Oscillator Synthesizer VST3
+# Project 1
 
 A polyphonic dual oscillator synthesizer plugin built with JUCE framework.
 
