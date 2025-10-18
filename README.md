@@ -102,7 +102,7 @@ A polyphonic dual oscillator synthesizer plugin built with JUCE framework.
 
 ## Project History
 - **Started**: February 2025
-- **Status**: Complete
+- **Status**: MVP complete, but implementing new features here and there.
 - Development paused April-October 2025 due to internship
 
 ## License
