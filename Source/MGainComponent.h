@@ -24,9 +24,13 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    void attachToParameters(juce::AudioProcessorValueTreeState& apvts, const juce::String& gainId);
+    void detachParameters();
+
 private:
 
     juce::Slider mSlider;
+    juce::Label mLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mSliderAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MGainComponent)

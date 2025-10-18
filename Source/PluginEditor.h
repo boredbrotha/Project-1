@@ -13,6 +13,8 @@
 #include "OscComponent.h"
 #include "AdsrComponent.h"
 #include "MGainComponent.h"
+#include "PitchRackComponent.h"
+#include "FilterComponent.h"
 
 //==============================================================================
 /**
@@ -28,8 +30,17 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    void switchToOscillator(int oscNum);
+    void savePresetButtonClicked();
+    void loadPresetButtonClicked();
+
+    int currentOscillator = 0;  // Initialize to 0 so first switchToOscillator(1) call works
+
+    juce::TextButton osc1Button {"1"};
+    juce::TextButton osc2Button {"2"};
+    juce::TextButton savePresetButton {"Save"};
+    juce::TextButton loadPresetButton {"Load"};
+
     Project1AudioProcessor& audioProcessor;
 
     MGainComponent mGain;
@@ -37,8 +48,12 @@ private:
     OscComponent osc;
 
     AdsrComponent adsr;
-    
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscSelAttachment;
+
+    PitchRackComponent pitchR;
+
+    FilterComponent filter;
+
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Project1AudioProcessorEditor)
 };

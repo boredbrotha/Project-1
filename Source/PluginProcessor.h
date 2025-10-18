@@ -12,6 +12,7 @@
 #include "SynthVoice.h"
 #include "SynthSound.h"
 #include "AdsrComponent.h"
+#include "FilterData.h"
 
 //==============================================================================
 /**
@@ -56,6 +57,10 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    // Preset file save/load
+    void savePresetToFile(const juce::File& file);
+    void loadPresetFromFile(const juce::File& file);
+
     juce::AudioProcessorValueTreeState apvts;
 
 private:
@@ -63,6 +68,10 @@ private:
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     juce::Synthesiser synth;
+
+    FilterData filter;
+
+
     void setParams();
     void setVoiceParams();
     void setFilterParams();

@@ -15,24 +15,31 @@
 //==============================================================================
 /*
 */
-class AdsrComponent  : public juce::Component
+class AdsrComponent : public juce::Component
 {
 public:
-    AdsrComponent(juce::AudioProcessorValueTreeState& apvts);
+    AdsrComponent(juce::String name);
     ~AdsrComponent() override;
 
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
 
-private:
+    void attachToParameters(juce::AudioProcessorValueTreeState& apvts,
+                           const juce::String& attackId,
+                           const juce::String& decayId,
+                           const juce::String& sustainId,
+                           const juce::String& releaseId);
+    void detachParameters();
 
-    void setSliderParams(juce::Slider& slider);
+private:
+    using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+
+    void setSliderWithLabel(juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramId, std::unique_ptr<Attachment>& attachment);
 
     juce::Slider attackSlider;
     juce::Slider decaySlider;
     juce::Slider sustainSlider;
     juce::Slider releaseSlider;
-
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
@@ -41,6 +48,12 @@ private:
     std::unique_ptr<SliderAttachment> sustainAttachment;
     std::unique_ptr<SliderAttachment> releaseAttachment;
 
+    juce::Label attackLabel{ "Attack", "A" };
+    juce::Label decayLabel{ "Decay", "D" };
+    juce::Label sustainLabel{ "Sustain", "S" };
+    juce::Label releaseLabel{ "Release", "R" };
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AdsrComponent)
+    juce::String componentName{ "" };
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AdsrComponent)
 };

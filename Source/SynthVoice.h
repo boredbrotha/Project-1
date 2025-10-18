@@ -15,6 +15,8 @@
 #include "AdsrData.h"
 #include "OscData.h"
 #include "MGainData.h"
+#include "PitchRackData.h"
+#include "FilterData.h"
 
 class SynthVoice : public juce::SynthesiserVoice {
 
@@ -33,16 +35,49 @@ public:
 
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples) override;
 
-    void update(const float attack, const float decay, const float sustain, const float release, const float mGainLinear);
+    void update(const float attack1, const float attack2, 
+                const float decay1, const float decay2,
+                const float sustain1, const float sustain2,
+                const float release1, const float release2,
+                const float mGainLinear1, const float mGainLinear2 ,
+                const float pRackO1, const float pRackO2,
+                const float pRackS1, const float pRackS2);
 
-    OscData& getOscillator() { return osc; };
+
+    FilterData& getFilter1() { return filter1; };
+    OscData& getOscillator1() { return osc1; };
+
+    FilterData& getFilter2() { return filter2; };
+    OscData& getOscillator2() { return osc2; };
+
+    void updateFilter(const int filterType1, const float frequency1, const float resonance1,
+                      const int filterType2, const float frequency2, const float resonance2);
+
+
+
 
 
 private:
-    OscData osc;
-    AdsrData adsr;
+
+    //Initializing the backends of all the components used in the synth.
+
+    //Initializing the components of Oscillator 1:
+    OscData osc1;
+    AdsrData adsr1;
+    MGainData mGain1;
+    PitchRackData pRack1;
+    FilterData filter1;
+
+    //Initializing the components of Oscillator 2:
+    OscData osc2;
+    AdsrData adsr2;
+    MGainData mGain2;
+    PitchRackData pRack2;
+    FilterData filter2;
+
+
     juce::AudioBuffer<float> synthBuffer;
-    MGainData mGain;
+    juce::AudioBuffer<float> osc2Buffer;
     bool isPrepared{ false };
 
 };

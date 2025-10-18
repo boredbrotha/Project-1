@@ -32,6 +32,15 @@ void OscData::setWaveType(const int choice) {
         //square
         initialise([](float x) { return x < 0.0f ? -1.0f : 1.0f; });
         break;
+
+    case 3:
+        //triangle
+        initialise([](float x) {    return 2.0f * std::abs(2.0f * (x / juce::MathConstants<float>::twoPi - std::floor(x / juce::MathConstants<float>::twoPi + 0.5f))) - 1.0f;
+            }, 128);
+        break;
+
+
+
     default:
         jassertfalse; //You're not supposed to be here!
         break;
@@ -44,7 +53,7 @@ void OscData::getNextAudioBlock(juce::dsp::AudioBlock<float>&block) {
 }
 
 void OscData::setWaveFrequency(const int midiNoteNumber) {
-    setFrequency(juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber), true);
+    setFrequency(midiNoteNumber, true);
 }
 
 

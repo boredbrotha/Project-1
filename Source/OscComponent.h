@@ -18,15 +18,19 @@
 class OscComponent  : public juce::Component
 {
 public:
-    OscComponent(juce::AudioProcessorValueTreeState& apvts, juce::String waveSelectorId);
+    OscComponent();
     ~OscComponent() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    void attachToParameters(juce::AudioProcessorValueTreeState& apvts, const juce::String& waveSelectorId);
+    void detachParameters();
+
 private:
 
     juce::ComboBox oscWaveSelector;
+    juce::Label oscLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> oscWaveSelectorAttachment;
 
 

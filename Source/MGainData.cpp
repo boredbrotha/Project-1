@@ -12,8 +12,8 @@
 
 
 
-void MGainData::updateMGain(const float mGainLinear) {
+void MGainData::updateMGain(const float mGainDecibels) {
 
-    setGainLinear(mGainLinear);
+    setGainDecibels(mGainDecibels);
 
 }

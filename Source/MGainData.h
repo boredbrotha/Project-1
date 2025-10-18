@@ -15,6 +15,6 @@
 class MGainData : public juce::dsp::Gain<float> {
 
 public:
-    void updateMGain(const float mGainlinear);
+    void updateMGain(const float mGainDecibels);
     
 };

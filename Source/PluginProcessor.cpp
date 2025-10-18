@@ -107,7 +107,7 @@ void Project1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 
     for (int i = 0; i < synth.getNumVoices(); i++) {
         if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
-            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumInputChannels());
+            voice->prepareToPlay(sampleRate, samplesPerBlock, getTotalNumOutputChannels());
         }
     }
 }
@@ -162,30 +162,57 @@ void Project1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
     for (int i = 0; i < synth.getNumVoices(); ++i) {
         if (auto voice = dynamic_cast<SynthVoice*>(synth.getVoice(i))) {
-            
 
-            auto& attack = *apvts.getRawParameterValue("ATTACK");
+            // OSC 1 parameters
+            auto& attack1 = *apvts.getRawParameterValue("ATTACK1");
+            auto& decay1 = *apvts.getRawParameterValue("DECAY1");
+            auto& sustain1 = *apvts.getRawParameterValue("SUSTAIN1");
+            auto& release1 = *apvts.getRawParameterValue("RELEASE1");
+            auto& oscWaveChoice1 = *apvts.getRawParameterValue("OSC1WAVETYPE");
+            auto& mGain1 = *apvts.getRawParameterValue("MGAIN1");
+            auto& pRackO1 = *apvts.getRawParameterValue("OCTAVE1");
+            auto& pRackS1 = *apvts.getRawParameterValue("SEMITONE1");
+            auto& filterType1 = *apvts.getRawParameterValue("FILTERTYPE1");
+            auto& filterCut1 = *apvts.getRawParameterValue("FILTERFREQ1");
+            auto& filterRes1 = *apvts.getRawParameterValue("FILTERRES1");
 
-            auto& decay = *apvts.getRawParameterValue("DECAY");
+            // OSC 2 parameters
+            auto& attack2 = *apvts.getRawParameterValue("ATTACK2");
+            auto& decay2 = *apvts.getRawParameterValue("DECAY2");
+            auto& sustain2 = *apvts.getRawParameterValue("SUSTAIN2");
+            auto& release2 = *apvts.getRawParameterValue("RELEASE2");
+            auto& oscWaveChoice2 = *apvts.getRawParameterValue("OSC2WAVETYPE");
+            auto& mGain2 = *apvts.getRawParameterValue("MGAIN2");
+            auto& pRackO2 = *apvts.getRawParameterValue("OCTAVE2");
+            auto& pRackS2 = *apvts.getRawParameterValue("SEMITONE2");
+            auto& filterType2 = *apvts.getRawParameterValue("FILTERTYPE2");
+            auto& filterCut2 = *apvts.getRawParameterValue("FILTERFREQ2");
+            auto& filterRes2 = *apvts.getRawParameterValue("FILTERRES2");
 
-            auto& sustain = *apvts.getRawParameterValue("SUSTAIN");
+            // Update voice with all parameters
+            voice->update(attack1.load(), attack2.load(),
+                         decay1.load(), decay2.load(),
+                         sustain1.load(), sustain2.load(),
+                         release1.load(), release2.load(),
+                         mGain1.load(), mGain2.load(),
+                         pRackO1.load(), pRackO2.load(),
+                         pRackS1.load(), pRackS2.load());
 
-            auto& release = *apvts.getRawParameterValue("RELEASE");
+            // Set waveform types for both oscillators
+            voice->getOscillator1().setWaveType(oscWaveChoice1.load());
+            voice->getOscillator2().setWaveType(oscWaveChoice2.load());
 
-            auto& oscWaveChoice = *apvts.getRawParameterValue("OSC1WAVETYPE");
+            // Update filters for both oscillators
+            voice->updateFilter(filterType1.load(), filterCut1.load(), filterRes1.load(),
+                               filterType2.load(), filterCut2.load(), filterRes2.load());
 
-            auto& mGain = *apvts.getRawParameterValue("MGAIN");
-
-            voice->update(attack.load(), decay.load(), sustain.load(), release.load(), mGain.load());
-
-            voice->getOscillator().setWaveType(oscWaveChoice);
-
-            
         }
 
     }
 
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+
 }
 
 //==============================================================================
@@ -202,15 +229,42 @@ juce::AudioProcessorEditor* Project1AudioProcessor::createEditor()
 //==============================================================================
 void Project1AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // Save APVTS state to binary (for DAW session save)
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void Project1AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    // Restore APVTS state from binary (for DAW session load)
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(apvts.state.getType()))
+            apvts.replaceState(juce::ValueTree::fromXml(*xmlState));
+}
+
+void Project1AudioProcessor::savePresetToFile(const juce::File& file)
+{
+    // Export APVTS state to XML file
+    auto state = apvts.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+
+    if (xml != nullptr)
+    {
+        xml->writeTo(file);
+    }
+}
+
+void Project1AudioProcessor::loadPresetFromFile(const juce::File& file)
+{
+    // Import APVTS state from XML file
+    std::unique_ptr<juce::XmlElement> xml(juce::XmlDocument::parse(file));
+
+    if (xml != nullptr && xml->hasTagName(apvts.state.getType()))
+    {
+        apvts.replaceState(juce::ValueTree::fromXml(*xml));
+    }
 }
 
 //==============================================================================
@@ -222,38 +276,56 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 juce::AudioProcessorValueTreeState::ParameterLayout Project1AudioProcessor::createParams() {
 
-    //Combobox: switch oscillator
-
-    //Attack - float
-
-    //Decay - float
-
-    //Sustain - float
-
-    //Release - float
 
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
 
     //OSC select
-    params.push_back(std::make_unique<juce::AudioParameterChoice>("OSC", "Oscillator", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
-    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square" }, 0));
+    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC1WAVETYPE", "Osc 1 Wave Type", juce::StringArray{ "Sine", "Saw", "Square", "Triangle"}, 0));
+    params.push_back(std::make_unique <juce::AudioParameterChoice>("OSC2WAVETYPE", "Osc 2 Wave Type", juce::StringArray{ "Sine", "Saw", "Square", "Triangle" }, 0));
 
 
 
 
     //ADSR
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float> {0.0f, 1.0f, }, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK1", "Attack 2", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK2", "Attack 2", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 0.1f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float> {0.0f, 1.0f, }, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY1", "Decay 1", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY2", "Decay 2", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 0.1f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float> {0.0f, 1.0f, }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN1", "Sustain 1", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN2", "Sustain 2", juce::NormalisableRange<float> { 0.1f, 1.0f, 0.1f }, 1.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float> {0.0f, 3.0f, }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE1", "Release 1", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE2", "Release 2", juce::NormalisableRange<float> { 0.1f, 3.0f, 0.1f }, 0.4f));
 
 
-    //Master Gain Knob
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("MGAIN", "Master Gain", juce::NormalisableRange<float> {0.0f, 1.0f, }, 1.0f));
+    //Master Gain Knobs
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("MGAIN1", "Master Gain 1", juce::NormalisableRange<float> {-100.0f, 0.0f, 1.0f }, -18.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("MGAIN2", "Master Gain 2", juce::NormalisableRange<float> {-100.0f, 0.0f, 1.0f }, -18.0f));
+
+
+    //Octave & Semitone Knobs
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("OCTAVE1", "Pitch Rack Octave 2", juce::NormalisableRange<float> {-4.0f, 4.0f, 1.0f }, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("OCTAVE2", "Pitch Rack Octave 2", juce::NormalisableRange<float> {-4.0f, 4.0f, 1.0f }, 0.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SEMITONE1", "Pitch Rack Semitone 1", juce::NormalisableRange<float> {-12.0f, 12.0f, 1.0f }, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SEMITONE2", "Pitch Rack Semitone 2", juce::NormalisableRange<float> {-12.0f, 12.0f, 1.0f }, 0.0f));
+
+
+
+
+    //Filter
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("FILTERTYPE1", "Filter Type 1", juce::StringArray{ "LowPass", "BandPass", "HighPass" }, 0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("FILTERTYPE2", "Filter Type 2", juce::StringArray{ "LowPass", "BandPass", "HighPass" }, 0));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTERFREQ1", "Filter Freq 1", juce::NormalisableRange<float> { 20.0f, 20000.0f, 0.1f, 0.6f }, 200.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTERFREQ2", "Filter Freq 2", juce::NormalisableRange<float> { 20.0f, 20000.0f, 0.1f, 0.6f }, 200.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTERRES1", "Filter Resonance 1", juce::NormalisableRange<float> { 1.0f, 10.0f, 0.1f }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FILTERRES2", "Filter Resonance 2", juce::NormalisableRange<float> { 1.0f, 10.0f, 0.1f }, 1.0f));
+
    
 
     return { params.begin(), params.end() };

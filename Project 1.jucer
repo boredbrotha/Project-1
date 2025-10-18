@@ -8,6 +8,10 @@
       <FILE id="xq6k6I" name="AdsrComponent.cpp" compile="1" resource="0"
             file="Source/AdsrComponent.cpp"/>
       <FILE id="VPGfu7" name="AdsrComponent.h" compile="0" resource="0" file="Source/AdsrComponent.h"/>
+      <FILE id="czYkyK" name="FilterComponent.cpp" compile="1" resource="0"
+            file="Source/FilterComponent.cpp"/>
+      <FILE id="d8KJai" name="FilterComponent.h" compile="0" resource="0"
+            file="Source/FilterComponent.h"/>
       <FILE id="aQKNux" name="MGainComponent.cpp" compile="1" resource="0"
             file="Source/MGainComponent.cpp"/>
       <FILE id="dA0yZW" name="MGainComponent.h" compile="0" resource="0"
@@ -15,14 +19,23 @@
       <FILE id="sbkvxq" name="OscComponent.cpp" compile="1" resource="0"
             file="Source/OscComponent.cpp"/>
       <FILE id="LDDpge" name="OscComponent.h" compile="0" resource="0" file="Source/OscComponent.h"/>
+      <FILE id="fdRDm6" name="PitchRackComponent.cpp" compile="1" resource="0"
+            file="Source/PitchRackComponent.cpp"/>
+      <FILE id="QXhx5R" name="PitchRackComponent.h" compile="0" resource="0"
+            file="Source/PitchRackComponent.h"/>
     </GROUP>
     <GROUP id="{42DE6F42-C408-FED7-66C9-87EC19189A7D}" name="Data">
       <FILE id="tlGZxA" name="AdsrData.cpp" compile="1" resource="0" file="Source/AdsrData.cpp"/>
       <FILE id="BiId98" name="AdsrData.h" compile="0" resource="0" file="Source/AdsrData.h"/>
+      <FILE id="x0cGHp" name="FilterData.cpp" compile="1" resource="0" file="Source/FilterData.cpp"/>
+      <FILE id="qZgANd" name="FilterData.h" compile="0" resource="0" file="Source/FilterData.h"/>
       <FILE id="PkteGA" name="MGainData.cpp" compile="1" resource="0" file="Source/MGainData.cpp"/>
       <FILE id="LGIVT4" name="MGainData.h" compile="0" resource="0" file="Source/MGainData.h"/>
       <FILE id="wpYj61" name="OscData.cpp" compile="1" resource="0" file="Source/OscData.cpp"/>
       <FILE id="vEHWHV" name="OscData.h" compile="0" resource="0" file="Source/OscData.h"/>
+      <FILE id="j4yqK9" name="PitchRackData.cpp" compile="1" resource="0"
+            file="Source/PitchRackData.cpp"/>
+      <FILE id="XkAMHG" name="PitchRackData.h" compile="0" resource="0" file="Source/PitchRackData.h"/>
     </GROUP>
     <GROUP id="{E15F8961-0F2C-FC0E-FF30-EFC8FF375B08}" name="Source">
       <FILE id="m7MHoY" name="SynthSound.cpp" compile="1" resource="0" file="Source/SynthSound.cpp"/>
